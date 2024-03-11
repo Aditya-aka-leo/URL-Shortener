@@ -9,4 +9,7 @@ COPY . .
 
 EXPOSE 8081
 
+# RUN rm /etc/nginx/conf.d/default.conf
+
+
 CMD ["npm", "start"]

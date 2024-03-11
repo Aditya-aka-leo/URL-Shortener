@@ -8,7 +8,7 @@ services:
     networks:
       - my-network
     volumes:
-      - D:\Project Short URL 1\redis\redis.conf:/usr/local/etc/redis/redis.conf
+      - .\redis\redis.conf:/usr/local/etc/redis/redis.conf
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
 
   zookeeper:
@@ -29,23 +29,22 @@ services:
       - /server/node_modules
       - ./server:/app
     ports:
-      - "8081:8081"  # Adjust to the desired external port
+      - "8081:8081"
     networks:
       - my-network
     restart: always
 
-  # Uncomment the following section if you want to use Nginx
-  # nginx:
-  #   container_name: nginx-container
-  #   image: nginx
-  #   volumes:
-  #     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-  #   depends_on:
-  #     - node-server
-  #   ports:
-  #     - "4000:80"
-  #   networks:
-  #     - my-network
+  nginx:
+    container_name: nginx
+    image: nginx
+    depends_on:
+      - node-server
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "4000:80"
+    networks:
+      - my-network
 
 networks:
   my-network:

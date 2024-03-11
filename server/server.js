@@ -6,11 +6,10 @@ const acquire = async () => {
   try {
     await require("./src/utils/ZooKeeper").zk_connect_sv();
     await require("./src/utils/mongo").connectDB();
-    // await require("./src/utils/redis").getClient();
     console.log("Acquisition completed successfully");
   } catch (error) {
     console.error("Error during acquisition:", error);
-    process.exit(1); // Exit the process in case of an error during initialization
+    process.exit(1);
   }
 };
 
