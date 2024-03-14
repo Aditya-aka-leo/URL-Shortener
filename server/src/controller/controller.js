@@ -13,12 +13,13 @@ const post_url = async (req, res) => {
     range.curr++;
   }
   try {
+    console.log(req.body.original_url)
     redis_client = await getClient.getClient();
     await url_design
       .findOne({ original_url: req.body.original_url })
       .then(async (url_exsist_mongo) => {
         if (url_exsist_mongo) {
-          let new_url = "bitly_clone.com/" + url_exsist_mongo.hashed_key;
+          let new_url = "http://localhost:4000/url/bitly_clone.com/" + url_exsist_mongo.hashed_key;
           res.json(new_url);
         } else {
           hash = hash_gen(range.cur);
@@ -34,7 +35,7 @@ const post_url = async (req, res) => {
                 url.original_url.toString(),
                 84600
               );
-              let new_url = "bitly_clone.com/" + url.hashed_key;
+              let new_url = "http://localhost:4000/url/bitly_clone.com/" + url.hashed_key;
               res.json(new_url);
             })
             .catch((err) => {
@@ -61,14 +62,14 @@ const get_url = async (req, res) => {
       .get(req.params.identifier)
       .then(async (redis_data) => {
         if (redis_data != null) {
-          let new_url = "http://" + redis_data;
+          let new_url = redis_data;
           res.redirect(new_url);
         } else {
           await url_design
             .findOne({ hashed_key: req.params.identifier })
             .then(async (url_exsist_mongo) => {
               if (url_exsist_mongo) {
-                let new_url = "http://" + url_exsist_mongo.original_url;
+                let new_url = url_exsist_mongo.original_url;
                 res.redirect(new_url);
               } else res.status(202);
             })
